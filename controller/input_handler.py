@@ -1,4 +1,4 @@
-# controller/input_handler.py
+﻿# controller/input_handler.py
 import tkinter as tk
 from model.camera import Camera
 from model.opentrack_sender import send_data_to_opentrack

@@ -1,6 +1,7 @@
 ﻿# view/gui.py
 import tkinter as tk
 from tkinter import ttk
+import threading
 from view.styles import apply_style
 from controller.input_handler import update_value, send_data, reset_values, on_entry_change
 
@@ -60,7 +61,7 @@ def create_gui(root, camera):
         xbox_enabled.set(not xbox_enabled.get())
         if xbox_enabled.get():
             from controller.xbox_controller import start_xbox_control
-            threading.Thread(target=start_xbox_control, args=(camera, pitch_entry, yaw_entry, roll_entry, x_entry, y_entry, z_entry)).start()
+            threading.Thread(target=start_xbox_control, args=(root, camera, pitch_entry, yaw_entry, roll_entry, x_entry, y_entry, z_entry, xbox_enabled)).start()
         else:
             from controller.xbox_controller import stop_xbox_control
             stop_xbox_control()

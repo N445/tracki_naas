@@ -21,7 +21,7 @@ def send_data(camera):
     send_data_to_opentrack(pitch, yaw, roll, x, y, z)
 
 # Fonction pour réinitialiser les valeurs
-def reset_values(camera, pitch_entry, yaw_entry, roll_entry, x_entry, y_entry, z_entry):
+def reset_values(camera, pitch_entry, yaw_entry, roll_entry, x_entry, y_entry, z_entry, pitch_slider, yaw_slider, roll_slider, x_slider, y_slider, z_slider):
     camera.update(pitch=0, yaw=0, roll=0, x=0, y=0, z=0)
     pitch_entry.delete(0, tk.END)
     pitch_entry.insert(0, "0")
@@ -35,13 +35,22 @@ def reset_values(camera, pitch_entry, yaw_entry, roll_entry, x_entry, y_entry, z
     y_entry.insert(0, "0")
     z_entry.delete(0, tk.END)
     z_entry.insert(0, "0")
+
+    pitch_slider.set(0)
+    yaw_slider.set(0)
+    roll_slider.set(0)
+    x_slider.set(0)
+    y_slider.set(0)
+    z_slider.set(0)
+
     send_data(camera)
 
 # Fonction pour mettre à jour les valeurs de l'objet Camera lorsque les valeurs des champs d'entrée sont modifiées manuellement
-def on_entry_change(event, camera, attribute):
+def on_entry_change(event, camera, attribute, slider):
     try:
         value = float(event.widget.get())
         setattr(camera, attribute, value)
+        slider.set(value)
         send_data(camera)
     except ValueError:
         pass

@@ -45,3 +45,11 @@ def on_entry_change(event, camera, attribute):
         send_data(camera)
     except ValueError:
         pass
+
+# Fonction pour mettre à jour les valeurs de l'objet Camera lorsque les valeurs des sliders sont modifiées
+def on_slider_change(val, entry, camera, attribute):
+    value = float(val)
+    entry.delete(0, tk.END)
+    entry.insert(0, str(value))
+    setattr(camera, attribute, value)
+    send_data(camera)

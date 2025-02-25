@@ -76,16 +76,16 @@ def create_input_row(frame, label_text, camera, attribute, row, min_val, max_val
     entry = ttk.Entry(frame, width=10, justify="center")
     entry.insert(0, "0")
     entry.grid(row=row, column=3, padx=5, pady=5)
-    ttk.Button(frame, text="-10", command=lambda: update_value(entry, -10, camera, attribute)).grid(row=row, column=1, padx=2, pady=5)
-    ttk.Button(frame, text="-5", command=lambda: update_value(entry, -5, camera, attribute)).grid(row=row, column=0, padx=2, pady=5)
-    ttk.Button(frame, text="+5", command=lambda: update_value(entry, +5, camera, attribute)).grid(row=row, column=4, padx=2, pady=5)
-    ttk.Button(frame, text="+10", command=lambda: update_value(entry, +10, camera, attribute)).grid(row=row, column=5, padx=2, pady=5)
+#     ttk.Button(frame, text="-10", command=lambda: update_value(entry, -10, camera, attribute)).grid(row=row, column=1, padx=2, pady=5)
+#     ttk.Button(frame, text="-5", command=lambda: update_value(entry, -5, camera, attribute)).grid(row=row, column=0, padx=2, pady=5)
+#     ttk.Button(frame, text="+5", command=lambda: update_value(entry, +5, camera, attribute)).grid(row=row, column=4, padx=2, pady=5)
+#     ttk.Button(frame, text="+10", command=lambda: update_value(entry, +10, camera, attribute)).grid(row=row, column=5, padx=2, pady=5)
     entry.bind("<KeyRelease>", lambda event: on_entry_change(event, camera, attribute))
 
     # Ajouter un slider
     slider = ttk.Scale(frame, from_=min_val, to=max_val, orient="horizontal", command=lambda val: on_slider_change(val, entry, camera, attribute))
     slider.set(0)
-    slider.grid(row=row+1, column=0, columnspan=6, padx=5, pady=5, sticky="ew")
+    slider.grid(row=row, column=1, padx=4, pady=5, sticky="ew")
 
     return entry, slider
 

@@ -4,6 +4,8 @@ from ttkbootstrap import Style
 from opentrack_sender import send_data_to_opentrack
 from camera import Camera
 from config import CONFIG
+import inputs
+import threading
 
 # Fonction pour mettre à jour une valeur et l'objet Camera
 def update_value(entry, increment, camera, attribute):
@@ -135,6 +137,61 @@ def create_gui(root):
     # Bouton Reset
     reset_button = ttk.Button(main_frame, text="Reset", command=lambda: reset_values(camera, pitch_entry, yaw_entry, roll_entry, x_entry, y_entry, z_entry))
     reset_button.grid(row=1, column=0, columnspan=2, pady=10)
+
+    # Bouton Always on Top
+    always_on_top = tk.BooleanVar(value=False)
+    def toggle_always_on_top():
+        always_on_top.set(not always_on_top.get())
+        root.attributes("-topmost", always_on_top.get())
+
+    ttk.Button(main_frame, text="Always on Top", command=toggle_always_on_top).grid(row=2, column=0, columnspan=2, pady=10)
+
+    # Bouton pour activer/désactiver la manette Xbox
+    xbox_enabled = tk.BooleanVar(value=False)
+    def toggle_xbox():
+        xbox_enabled.set(not xbox_enabled.get())
+        if xbox_enabled.get():
+            threading.Thread(target=start_xbox_control, args=(camera,)).start()
+        else:
+            stop_xbox_control()
+
+    ttk.Button(main_frame, text="Toggle Xbox Controller", command=toggle_xbox).grid(row=3, column=0, columnspan=2, pady=10)
+
+    # Fonction pour gérer la manette Xbox
+    def start_xbox_control(camera):
+        def handle_xbox_input():
+            events = inputs.get_gamepad()
+            for event in events:
+                if event.ev_type == "Key":
+                    if event.code == "BTN_SOUTH" and event.state == 1:  # Bouton A
+                        update_value(z_entry, +0.1, camera, "z")  # Réduire la sensibilité
+                    elif event.code == "BTN_NORTH" and event.state == 1:  # Bouton B
+                        update_value(z_entry, -0.1, camera, "z")  # Réduire la sensibilité
+                    elif event.code == "BTN_TL" and event.state == 1:  # Gâchette gauche
+                        update_value(z_entry, -0.1, camera, "z")  # Corriger la fonctionnalité de descente
+                    elif event.code == "BTN_TR" and event.state == 1:  # Gâchette droite
+                        update_value(z_entry, +0.1, camera, "z")  # Corriger la fonctionnalité de montée
+                elif event.ev_type == "Absolute":
+                    if event.code == "ABS_X":
+                        update_value(x_entry, event.state / 32767 * 0.5, camera, "x")  # Réduire la sensibilité
+                    elif event.code == "ABS_Y":
+                        update_value(y_entry, event.state / 32767 * 0.5, camera, "y")  # Réduire la sensibilité
+                    elif event.code == "ABS_RX":
+                        update_value(pitch_entry, event.state / 32767 * 0.5, camera, "pitch")  # Réduire la sensibilité
+                    elif event.code == "ABS_RY":
+                        update_value(yaw_entry, event.state / 32767 * 0.5, camera, "yaw")  # Réduire la sensibilité
+                    elif event.code == "ABS_HAT0X":
+                        update_value(roll_entry, event.state * 10, camera, "roll")  # Garder la sensibilité inchangée
+                    elif event.code == "ABS_HAT0Y":
+                        update_value(roll_entry, event.state * 10, camera, "roll")  # Garder la sensibilité inchangée
+
+        while xbox_enabled.get():
+            handle_xbox_input()
+            root.after(10)
+
+    def stop_xbox_control():
+        pass
+
 
     # Envoyer les données à chaque changement manuel
     def on_entry_change(event, camera, attribute):

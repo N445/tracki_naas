@@ -1,0 +1,4 @@
+﻿tkinter
+matplotlib
+numpy
+ttkbootstrap

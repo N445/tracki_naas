@@ -1,11 +1,14 @@
-﻿import tkinter as tk
-from gui import create_gui
+﻿# main.py
+import tkinter as tk
+from model.camera import Camera
+from view.gui import create_gui
 
 def main():
     root = tk.Tk()
-    root.title("OpenTrack Data Sender")
+    root.title("Tracki Naas : OpenTrack Data Sender")
 
-    camera, pitch_entry, yaw_entry, roll_entry, x_entry, y_entry, z_entry = create_gui(root)
+    camera = Camera()
+    create_gui(root, camera)
 
     # Lancer la boucle principale de l'interface graphique
     root.mainloop()

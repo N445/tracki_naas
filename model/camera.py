@@ -1,4 +1,5 @@
-﻿class Camera:
+﻿# model/camera.py
+class Camera:
     def __init__(self, pitch=0, yaw=0, roll=0, x=0, y=0, z=0):
         self.pitch = pitch
         self.yaw = yaw

@@ -1,4 +1,5 @@
-﻿import socket
+﻿# model/opentrack_sender.py
+import socket
 import logging
 import struct
 

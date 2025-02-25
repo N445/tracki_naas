@@ -3,6 +3,8 @@ import tkinter as tk
 from model.camera import Camera
 from model.opentrack_sender import send_data_to_opentrack
 
+
+
 # Fonction pour mettre à jour une valeur et l'objet Camera
 def update_value(entry, increment, camera, attribute):
     try:
@@ -45,20 +47,36 @@ def reset_values(camera, pitch_entry, yaw_entry, roll_entry, x_entry, y_entry, z
 
     send_data(camera)
 
+# Variable de contrôle pour éviter les mises à jour récursives
+updating = False
+
 # Fonction pour mettre à jour les valeurs de l'objet Camera lorsque les valeurs des champs d'entrée sont modifiées manuellement
 def on_entry_change(event, camera, attribute, slider):
+    global updating
+    if updating:
+        return
     try:
+        updating = True
         value = float(event.widget.get())
         setattr(camera, attribute, value)
         slider.set(value)
         send_data(camera)
     except ValueError:
         pass
+    finally:
+        updating = False
 
 # Fonction pour mettre à jour les valeurs de l'objet Camera lorsque les valeurs des sliders sont modifiées
 def on_slider_change(val, entry, camera, attribute):
-    value = float(val)
-    entry.delete(0, tk.END)
-    entry.insert(0, str(value))
-    setattr(camera, attribute, value)
-    send_data(camera)
+    global updating
+    if updating:
+        return
+    try:
+        updating = True
+        value = float(val)
+        entry.delete(0, tk.END)
+        entry.insert(0, str(value))
+        setattr(camera, attribute, value)
+        send_data(camera)
+    finally:
+        updating = False

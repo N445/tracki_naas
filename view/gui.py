@@ -43,7 +43,7 @@ def create_gui(root, camera):
     button_frame.grid(row=1, column=0, columnspan=2, pady=10)
 
     # Bouton Reset
-    reset_button = ttk.Button(button_frame, text="Reset", command=lambda: reset_values(camera, pitch_entry, yaw_entry, roll_entry, x_entry, y_entry, z_entry))
+    reset_button = ttk.Button(button_frame, text="Reset", command=lambda: reset_values(camera, pitch_entry, yaw_entry, roll_entry, x_entry, y_entry, z_entry, pitch_slider, yaw_slider, roll_slider, x_slider, y_slider, z_slider))
     reset_button.grid(row=0, column=0, padx=5)
 
     # Bouton Always on Top
@@ -80,16 +80,10 @@ def create_input_row(frame, label_text, camera, attribute, row, min_val, max_val
     entry = ttk.Entry(frame, width=10, justify="center")
     entry.insert(0, "0")
     entry.grid(row=row, column=3, padx=5, pady=5)
-#     ttk.Button(frame, text="-10", command=lambda: update_value(entry, -10, camera, attribute)).grid(row=row, column=1, padx=2, pady=5)
-#     ttk.Button(frame, text="-5", command=lambda: update_value(entry, -5, camera, attribute)).grid(row=row, column=0, padx=2, pady=5)
-#     ttk.Button(frame, text="+5", command=lambda: update_value(entry, +5, camera, attribute)).grid(row=row, column=4, padx=2, pady=5)
-#     ttk.Button(frame, text="+10", command=lambda: update_value(entry, +10, camera, attribute)).grid(row=row, column=5, padx=2, pady=5)
-    entry.bind("<KeyRelease>", lambda event: on_entry_change(event, camera, attribute))
-
-    # Ajouter un slider
     slider = ttk.Scale(frame, from_=min_val, to=max_val, orient="horizontal", command=lambda val: on_slider_change(val, entry, camera, attribute))
     slider.set(0)
     slider.grid(row=row, column=1, padx=4, pady=5, sticky="ew")
+    entry.bind("<KeyRelease>", lambda event: on_entry_change(event, camera, attribute, slider))
 
     return entry, slider
 

@@ -1,5 +1,0 @@
-﻿tkinter
-matplotlib
-numpy
-ttkbootstrap
-inputs

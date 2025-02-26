@@ -1,75 +1,31 @@
 # Tracki Naas
 
-Tracki Naas is a Python application designed to control and visualize camera positions using a graphical user interface (GUI) built with Tkinter and Matplotlib. This project aims to provide an easy-to-use tool for setting camera positions via a game controller or manual inputs.
-
-## Features
-
-- **Camera Control**: Set the position of a camera using a game controller or manual inputs.
-- **Visualization**: Visualize the camera's position and orientation (roll, pitch, yaw) using Matplotlib for better insights.
-- **User-Friendly Interface**: Built with Tkinter for an intuitive user experience.
-
-## Requirements
-
-- Python 3.x (if running from source)
-- Matplotlib (if running from source)
-- Tkinter (if running from source)
+The OpenTrack Interface project is a graphical interface designed to send position and orientation data to OpenTrack. It allows users to control pitch, yaw, roll, and X, Y, Z coordinates using an Xbox controller or manual inputs via sliders and entry fields.
 
 ## Installation
 
-### Using the Executable (Recommended)
+### Download the Application
+You can download the latest release of the application from the [Releases](https://github.com/N445/tracki_naas/releases) page. The release includes a `.exe` file for easy installation.
 
-1. **Download the Executable**:
-
-   Download the pre-built executable from the [releases page](https://github.com/N445/tracki_naas/releases).
-
-3. **Run the Executable**:
-
-   Simply double-click the downloaded `.exe` file to launch the application.
-
-### Running from Source
-
-1. **Clone the Repository**:
-
-```sh
-git clone https://github.com/yourusername/tracki-naas.git
-cd tracki-naas
-```
-
-2. **Install Dependencies**:
-
-Make sure you have Python installed on your system. Then, install the required dependencies using pip:
-
-```sh
-pip install matplotlib
-```
-
-3. **Run the Application**:
-
-Navigate to the project directory and run the main script:
-
-```sh
-python tracki_naas_v2py.py
-```
+### Requirements
+- **OpenTrack**: You need to have OpenTrack installed on your system. You can download it from the [OpenTrack website](https://github.com/opentrack/opentrack).
+- **UDP over Network**: Ensure that OpenTrack is configured to use UDP over Network on port 4242.
 
 ## Usage
 
-1. **Set Camera Position**: Use the game controller or manual inputs to set the camera's position (x, y, z) and orientation (roll, pitch, yaw).
-2. **Visualize Data**: Click the visualize button to see the camera's position and orientation plotted on a graph.
-3. **Save Data**: Save your data for future use.
+1. **Launch OpenTrack**: Start OpenTrack and ensure it is configured to receive data over UDP on port 4242.
+2. **Run the Application**: Launch the downloaded `.exe` file from the releases page.
+3. **Control the Values**: Use the sliders or manual entry fields to adjust the pitch, yaw, roll, and X, Y, Z coordinates. The values will be synchronized in real-time with OpenTrack.
+4. **Reset or Keep in Foreground**: Use the provided buttons to reset the values or keep the application window in the foreground.
+
+## Note
+This project is currently in beta and under active development. We are working on stabilization and optimization to improve the overall experience.
 
 ## Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Commit your changes (`git commit -am 'Add new feature'`).
-4. Push to the branch (`git push origin feature-branch`).
-5. Create a new Pull Request.
+If you would like to contribute to the project, please feel free to open issues or submit pull requests. Your feedback and contributions are welcome!
 
 ## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
 ## Contact
 

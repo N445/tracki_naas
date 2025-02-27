@@ -51,32 +51,19 @@ def reset_values(camera, pitch_entry, yaw_entry, roll_entry, x_entry, y_entry, z
 updating = False
 
 # Fonction pour mettre à jour les valeurs de l'objet Camera lorsque les valeurs des champs d'entrée sont modifiées manuellement
-def on_entry_change(event, camera, attribute, slider):
-    global updating
-    if updating:
-        return
+def on_entry_change(event, camera, attribute, slider, sensitivity=1):  # Ajout d'une valeur par défaut
     try:
-        updating = True
         value = float(event.widget.get())
         setattr(camera, attribute, value)
-        slider.set(value)
+        slider.set(value / sensitivity)
         send_data(camera)
     except ValueError:
         pass
-    finally:
-        updating = False
 
 # Fonction pour mettre à jour les valeurs de l'objet Camera lorsque les valeurs des sliders sont modifiées
-def on_slider_change(val, entry, camera, attribute):
-    global updating
-    if updating:
-        return
-    try:
-        updating = True
-        value = float(val)
-        entry.delete(0, tk.END)
-        entry.insert(0, str(value))
-        setattr(camera, attribute, value)
-        send_data(camera)
-    finally:
-        updating = False
+def on_slider_change(val, entry, camera, attribute, sensitivity):
+    value = float(val) * sensitivity
+    entry.delete(0, tk.END)
+    entry.insert(0, f"{value:.2f}")
+    setattr(camera, attribute, value)
+    send_data(camera)

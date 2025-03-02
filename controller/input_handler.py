@@ -18,12 +18,13 @@ def update_value(entry, increment, camera, attribute):
     setattr(camera, attribute, new_value)
     send_data(camera)
 
+
+
 # Fonction pour envoyer les données à OpenTrack
 def send_data(camera):
     pitch, yaw, roll, x, y, z = camera.get_data()
-    # On récupère le port depuis app_config
-    current_port = app_config["opentrack_port"]
-    send_data_to_opentrack(pitch, yaw, roll, x, y, z, current_port)
+    send_data_to_opentrack(pitch, yaw, roll, x, y, z, app_config["opentrack_port"])
+
 
 # Fonction pour réinitialiser les valeurs
 def reset_values(camera, pitch_entry, yaw_entry, roll_entry, x_entry, y_entry, z_entry, pitch_slider, yaw_slider, roll_slider, x_slider, y_slider, z_slider):
@@ -53,21 +54,24 @@ def reset_values(camera, pitch_entry, yaw_entry, roll_entry, x_entry, y_entry, z
 # Variable de contrôle pour éviter les mises à jour récursives
 updating = False
 
+# Synchronisation du champ de saisie avec le slider
 def on_entry_change(event, camera, attribute, slider):
     try:
         value = float(event.widget.get())
         setattr(camera, attribute, value)
-        slider.set(getattr(camera, attribute))  # Mise à jour du slider
+        slider.set(value)
         send_data(camera)
     except ValueError:
         pass
 
+# Synchronisation du slider avec le champ de saisie
 def on_slider_change(val, entry, camera, attribute):
     value = float(val)
-    setattr(camera, attribute, value)
     entry.delete(0, tk.END)
-    entry.insert(0, str(getattr(camera, attribute)))  # Mise à jour de l'entrée
+    entry.insert(0, f"{value:.2f}")
+    setattr(camera, attribute, value)
     send_data(camera)
+
 
 
 def set_absolute_value(entry, val, camera, attribute):

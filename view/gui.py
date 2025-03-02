@@ -1,4 +1,5 @@
 ﻿# gui.py
+
 import tkinter as tk
 from tkinter import ttk
 import threading
@@ -6,17 +7,16 @@ import pygame
 from controller.preset_manager import save_preset, load_preset, list_presets
 from tkinter import messagebox
 
-
 from view.styles import apply_style
-from controller.input_handler import update_value, send_data, reset_values, on_entry_change
-from controller.xbox_controller import start_xbox_control, stop_xbox_control
+from controller.input_handler import update_value, send_data, reset_values, on_entry_change, on_slider_change
+from controller.xbox_controller_v2 import XboxControllerV2  # Utilisation de la nouvelle classe
 from config import app_config
 
 def create_gui(root, camera):
     # Initialiser Pygame pour pouvoir lister les joysticks
     pygame.init()
 
-    # Appliquer le style
+    # Appliquer le style de l'interface
     apply_style(root)
 
     # ---------------- Barre de menu en haut ----------------
@@ -92,38 +92,38 @@ def create_gui(root, camera):
     )
     always_on_top_check.grid(row=0, column=2, padx=5)
 
-    # Case "Xbox Controller"
-    xbox_enabled = tk.BooleanVar(value=False)
-    xbox_thread = None
+   # # ---------- Intégration du Xbox Controller v2 ----------
+   # xbox_enabled = tk.BooleanVar(value=False)
+#
+   # # Création de l'instance de XboxControllerV2 avec les références aux widgets et l'objet Camera
+   # xbox_handler = XboxControllerV2(
+   #     root,
+   #     camera,
+   #     pitch_entry,
+   #     yaw_entry,
+   #     roll_entry,
+   #     x_entry,
+   #     y_entry,
+   #     z_entry,
+   #     xbox_enabled,
+   #     app_config["device_index"]
+   # )
+#
+   # def toggle_xbox():
+   #     if xbox_enabled.get():
+   #         xbox_handler.start()
+   #     else:
+   #         xbox_handler.stop()
+#
+   # xbox_check = ttk.Checkbutton(
+   #     button_frame,
+   #     text="Xbox Controller",
+   #     variable=xbox_enabled,
+   #     command=toggle_xbox
+   # )
+   # xbox_check.grid(row=0, column=3, padx=5)
 
-    def toggle_xbox():
-        nonlocal xbox_thread
-        if xbox_enabled.get():
-            # Démarrer le contrôle Xbox
-            xbox_thread = threading.Thread(
-                target=start_xbox_control,
-                args=(root, camera, pitch_entry, yaw_entry, roll_entry,
-                      x_entry, y_entry, z_entry,
-                      xbox_enabled,
-                      app_config["device_index"]),  # On passe l’index du device choisi
-                daemon=True
-            )
-            xbox_thread.start()
-        else:
-            # Stopper le contrôle
-            stop_xbox_control()
-            xbox_thread = None
-
-    xbox_check = ttk.Checkbutton(
-        button_frame,
-        text="Xbox Controller",
-        variable=xbox_enabled,
-        command=toggle_xbox
-    )
-    xbox_check.grid(row=0, column=3, padx=5)
-
-
-# ---------- Système de Preset ----------
+    # ---------- Système de Preset ----------
     preset_frame = ttk.Frame(main_frame)
     preset_frame.grid(row=3, column=0, columnspan=2, pady=10)
 
@@ -186,7 +186,6 @@ def create_gui(root, camera):
 
     return camera, pitch_entry, yaw_entry, roll_entry, x_entry, y_entry, z_entry
 
-
 def create_input_row(frame, label_text, camera, attribute, row, min_val, max_val):
     ttk.Label(frame, text=label_text).grid(row=row, column=0, padx=5, pady=5, sticky="w")
 
@@ -216,7 +215,6 @@ def on_slider_change(val, entry, camera, attribute):
     entry.insert(0, f"{value:.2f}")
     setattr(camera, attribute, value)
     send_data(camera)
-
 
 # --------------------- Fenêtre de configuration ----------------------
 

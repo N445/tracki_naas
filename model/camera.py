@@ -1,44 +1,33 @@
-﻿# model/camera.py
+﻿# camera.py
 import logging
 
 class Camera:
     def __init__(self, pitch=0, yaw=0, roll=0, x=0, y=0, z=0):
-        self._pitch = 0
-        self._yaw = 0
-        self._roll = 0
-        self._x = 0
-        self._y = 0
-        self._z = 0
-        self.update(pitch, yaw, roll, x, y, z)
+        self.pitch = pitch
+        self.yaw = yaw
+        self.roll = roll
+        self.x = x
+        self.y = y
+        self.z = z
 
     def update(self, pitch=None, yaw=None, roll=None, x=None, y=None, z=None):
         if pitch is not None:
-            self._pitch = round(self._clamp(pitch, -180, 180), 2)
+            self.pitch = self._clamp(pitch, -180, 180)
         if yaw is not None:
-            self._yaw = round(self._clamp(yaw, -180, 180), 2)
+            self.yaw = self._clamp(yaw, -180, 180)
         if roll is not None:
-            self._roll = round(self._clamp(roll, -180, 180), 2)
+            self.roll = self._clamp(roll, -180, 180)
         if x is not None:
-            self._x = round(self._clamp(x, -100, 100), 2)
+            self.x = self._clamp(x, -100, 100)
         if y is not None:
-            self._y = round(self._clamp(y, -100, 100), 2)
+            self.y = self._clamp(y, -100, 100)
         if z is not None:
-            self._z = round(self._clamp(z, -100, 100), 2)
+            self.z = self._clamp(z, -100, 100)
 
-        logging.debug(f"Update Camera : {self}")
+        print(f"Camera updated: pitch={self.pitch}, yaw={self.yaw}, roll={self.roll}, x={self.x}, y={self.y}, z={self.z}")  # Debug
 
     def get_data(self):
-        return self._pitch, self._yaw, self._roll, self._x, self._y, self._z
+        return self.pitch, self.yaw, self.roll, self.x, self.y, self.z
 
     def _clamp(self, value, min_val, max_val):
         return max(min(value, max_val), min_val)
-
-    def __getattr__(self, attr):
-        return getattr(self, f"_{attr}")
-
-    def __setattr__(self, attr, value):
-        if attr in {"_pitch", "_yaw", "_roll"}:
-            value = self._clamp(value, -180, 180)
-        elif attr in {"_x", "_y", "_z"}:
-            value = self._clamp(value, -100, 100)
-        super().__setattr__(attr, round(value, 2))

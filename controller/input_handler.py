@@ -53,23 +53,22 @@ def reset_values(camera, pitch_entry, yaw_entry, roll_entry, x_entry, y_entry, z
 # Variable de contrôle pour éviter les mises à jour récursives
 updating = False
 
-# Fonction pour mettre à jour les valeurs de l'objet Camera lorsque les valeurs des champs d'entrée sont modifiées manuellement
-def on_entry_change(event, camera, attribute, slider, sensitivity=1):  # Ajout d'une valeur par défaut
+def on_entry_change(event, camera, attribute, slider):
     try:
         value = float(event.widget.get())
         setattr(camera, attribute, value)
-        slider.set(value / sensitivity)
+        slider.set(getattr(camera, attribute))  # Mise à jour du slider
         send_data(camera)
     except ValueError:
         pass
 
-# Fonction pour mettre à jour les valeurs de l'objet Camera lorsque les valeurs des sliders sont modifiées
-def on_slider_change(val, entry, camera, attribute, sensitivity):
-    value = float(val) * sensitivity
-    entry.delete(0, tk.END)
-    entry.insert(0, f"{value:.2f}")
+def on_slider_change(val, entry, camera, attribute):
+    value = float(val)
     setattr(camera, attribute, value)
+    entry.delete(0, tk.END)
+    entry.insert(0, str(getattr(camera, attribute)))  # Mise à jour de l'entrée
     send_data(camera)
+
 
 def set_absolute_value(entry, val, camera, attribute):
     """

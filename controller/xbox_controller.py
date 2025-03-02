@@ -16,7 +16,7 @@ roll       = 0.0
 # Paramètres
 DEADZONE     = 0.3    # 30% de zone morte
 BASE_SMOOTH  = 0.005  # Vitesse d'évolution standard
-SLOW_SMOOTH  = 0.002  # Vitesse quand on maintient X
+SLOW_SMOOTH  = 0.0005  # Vitesse quand on maintient X
 MIN_VAL      = -180.0
 MAX_VAL      =  180.0
 

@@ -126,7 +126,7 @@ def create_input_row(frame, label_text, camera, attribute, row, min_val, max_val
     ttk.Label(frame, text=label_text).grid(row=row, column=0, padx=5, pady=5, sticky="w")
 
     entry = ttk.Entry(frame, width=10, justify="center")
-    entry.insert(0, "0")
+    entry.insert(0, str(getattr(camera, attribute)))
     entry.grid(row=row, column=1, padx=5, pady=5)
 
     slider = ttk.Scale(
@@ -137,11 +137,11 @@ def create_input_row(frame, label_text, camera, attribute, row, min_val, max_val
         length=300,
         command=lambda val: on_slider_change(val, entry, camera, attribute)
     )
-    slider.set(0)
+    slider.set(getattr(camera, attribute))
     slider.grid(row=row + 1, column=0, columnspan=2, padx=4, pady=5, sticky="ew")
 
     entry.bind("<FocusOut>", lambda event: on_entry_change(event, camera, attribute, slider))
-    entry.bind("<Return>",   lambda event: on_entry_change(event, camera, attribute, slider))
+    entry.bind("<Return>", lambda event: on_entry_change(event, camera, attribute, slider))
 
     return entry, slider
 

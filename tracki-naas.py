@@ -1,4 +1,4 @@
-﻿# main.py
+﻿# tracki-naas.py
 import tkinter as tk
 from model.camera import Camera
 from view.gui import create_gui

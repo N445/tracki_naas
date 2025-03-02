@@ -15,4 +15,4 @@ def send_data_to_opentrack(pitch, yaw, roll, x, y, z, port=4242):
     message = f"{pitch} {yaw} {roll} {x} {y} {z}"
     data = struct.pack('dddddd', x, y, z, yaw, pitch, roll)
     sock.sendto(data, (OPENTRACK_IP, port))
-#     logging.debug(f"Sent data to OpenTrack (port={port}): {message}")
+    logging.debug(f"Sent data to OpenTrack (port={port}): {message}")

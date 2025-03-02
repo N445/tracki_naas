@@ -3,6 +3,9 @@ import tkinter as tk
 from tkinter import ttk
 import threading
 import pygame
+from controller.preset_manager import save_preset, load_preset, list_presets
+from tkinter import messagebox
+
 
 from view.styles import apply_style
 from controller.input_handler import update_value, send_data, reset_values, on_entry_change
@@ -118,6 +121,68 @@ def create_gui(root, camera):
         command=toggle_xbox
     )
     xbox_check.grid(row=0, column=3, padx=5)
+
+
+# ---------- Système de Preset ----------
+    preset_frame = ttk.Frame(main_frame)
+    preset_frame.grid(row=3, column=0, columnspan=2, pady=10)
+
+    # Entrée pour le nom du preset
+    preset_entry = ttk.Entry(preset_frame, width=20)
+    preset_entry.grid(row=0, column=0, padx=5, pady=5)
+
+    def save_current_preset():
+        preset_name = preset_entry.get().strip()
+        if not preset_name:
+            messagebox.showwarning("Erreur", "Veuillez entrer un nom de preset.")
+            return
+        save_preset(preset_name, camera)
+        update_preset_list()  # Rafraîchir la liste après sauvegarde
+
+    save_button = ttk.Button(preset_frame, text="Sauver", command=save_current_preset)
+    save_button.grid(row=0, column=1, padx=5, pady=5)
+
+    # Liste déroulante des presets
+    preset_var = tk.StringVar()
+    preset_dropdown = ttk.Combobox(preset_frame, textvariable=preset_var, state="readonly")
+    preset_dropdown.grid(row=0, column=2, padx=5, pady=5)
+
+    def load_selected_preset():
+        selected_preset = preset_var.get()
+        if not selected_preset:
+            messagebox.showwarning("Erreur", "Veuillez choisir un preset.")
+            return
+
+        preset_data = load_preset(selected_preset, camera)
+        if preset_data:
+            pitch_entry.delete(0, tk.END)
+            pitch_entry.insert(0, str(preset_data["pitch"]))
+            yaw_entry.delete(0, tk.END)
+            yaw_entry.insert(0, str(preset_data["yaw"]))
+            roll_entry.delete(0, tk.END)
+            roll_entry.insert(0, str(preset_data["roll"]))
+            x_entry.delete(0, tk.END)
+            x_entry.insert(0, str(preset_data["x"]))
+            y_entry.delete(0, tk.END)
+            y_entry.insert(0, str(preset_data["y"]))
+            z_entry.delete(0, tk.END)
+            z_entry.insert(0, str(preset_data["z"]))
+
+            pitch_slider.set(preset_data["pitch"])
+            yaw_slider.set(preset_data["yaw"])
+            roll_slider.set(preset_data["roll"])
+            x_slider.set(preset_data["x"])
+            y_slider.set(preset_data["y"])
+            z_slider.set(preset_data["z"])
+
+    load_button = ttk.Button(preset_frame, text="Charger", command=load_selected_preset)
+    load_button.grid(row=0, column=3, padx=5, pady=5)
+
+    def update_preset_list():
+        """Rafraîchir la liste des presets disponibles."""
+        preset_dropdown["values"] = list_presets()
+
+    update_preset_list()  # Charger les presets existants au démarrage
 
     return camera, pitch_entry, yaw_entry, roll_entry, x_entry, y_entry, z_entry
 

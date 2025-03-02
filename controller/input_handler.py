@@ -2,6 +2,7 @@
 import tkinter as tk
 from model.camera import Camera
 from model.opentrack_sender import send_data_to_opentrack
+from config import app_config
 
 
 
@@ -20,7 +21,9 @@ def update_value(entry, increment, camera, attribute):
 # Fonction pour envoyer les données à OpenTrack
 def send_data(camera):
     pitch, yaw, roll, x, y, z = camera.get_data()
-    send_data_to_opentrack(pitch, yaw, roll, x, y, z)
+    # On récupère le port depuis app_config
+    current_port = app_config["opentrack_port"]
+    send_data_to_opentrack(pitch, yaw, roll, x, y, z, current_port)
 
 # Fonction pour réinitialiser les valeurs
 def reset_values(camera, pitch_entry, yaw_entry, roll_entry, x_entry, y_entry, z_entry, pitch_slider, yaw_slider, roll_slider, x_slider, y_slider, z_slider):
@@ -67,3 +70,14 @@ def on_slider_change(val, entry, camera, attribute, sensitivity):
     entry.insert(0, f"{value:.2f}")
     setattr(camera, attribute, value)
     send_data(camera)
+
+def set_absolute_value(entry, val, camera, attribute):
+    """
+    Met directement l'Entry à `val`,
+    met camera.<attribute> = val,
+    et envoie à OpenTrack.
+    """
+    entry.delete(0, tk.END)
+    entry.insert(0, f"{val:.2f}")  # Affichage formaté dans l'Entry
+    setattr(camera, attribute, val) # Mise à jour de l'objet camera
+    send_data(camera)               # Envoi à OpenTrack

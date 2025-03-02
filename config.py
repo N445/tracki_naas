@@ -7,3 +7,10 @@ CONFIG = {
     "entry_background_color": "#333333", # Couleur de fond des champs d'entrée
     "entry_foreground_color": "#ffffff", # Couleur du texte des champs d'entrée
 }
+
+
+# Petit dictionnaire global pour stocker la config
+app_config = {
+    "opentrack_port": 4242,        # Port par défaut
+    "device_index": 0             # On prendra par défaut le 1er joystick
+}
